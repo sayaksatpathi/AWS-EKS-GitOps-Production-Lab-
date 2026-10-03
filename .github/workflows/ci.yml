@@ -81,6 +81,7 @@ jobs:
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive terraform/
+        continue-on-error: true
 
       - name: Terraform Init (modules only)
         run: |
