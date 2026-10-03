@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudlaunch-api
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: cloudlaunch
+  source:
+    repoURL: https://github.com/sayaksatpathi/AWS-EKS-GitOps-Production-Lab-
+    targetRevision: main
+    path: gitops/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cloudlaunch
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  revisionHistoryLimit: 5

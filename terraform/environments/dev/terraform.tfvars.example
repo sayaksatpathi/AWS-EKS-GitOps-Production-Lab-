@@ -1,0 +1,19 @@
+# Copy this file to terraform.tfvars and fill in your values
+# NEVER commit terraform.tfvars — it's in .gitignore
+
+aws_region         = "us-east-1"
+project            = "cloudlaunch"
+environment        = "dev"
+owner              = "your-name"
+
+vpc_cidr           = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b"]
+
+kubernetes_version  = "1.30"
+node_instance_types = ["t3.medium"]
+node_desired_size   = 2
+node_min_size       = 1
+node_max_size       = 3
+
+github_org  = "sayaksatpathi"
+github_repo = "AWS-EKS-GitOps-Production-Lab-"

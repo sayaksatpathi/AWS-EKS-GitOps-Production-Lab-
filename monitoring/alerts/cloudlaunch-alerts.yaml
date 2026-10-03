@@ -1,0 +1,78 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cloudlaunch-alerts
+  namespace: monitoring
+  labels:
+    app: kube-prometheus-stack
+    release: prometheus
+spec:
+  groups:
+    - name: cloudlaunch.application
+      interval: 30s
+      rules:
+        - alert: CloudLaunchHighErrorRate
+          expr: |
+            (
+              sum(rate(cloudlaunch_http_requests_total{status=~"5.."}[5m]))
+              /
+              sum(rate(cloudlaunch_http_requests_total[5m]))
+            ) > 0.05
+          for: 2m
+          labels:
+            severity: critical
+            team: platform
+          annotations:
+            summary: "CloudLaunch API high error rate"
+            description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+            runbook_url: "https://github.com/sayaksatpathi/AWS-EKS-GitOps-Production-Lab-/blob/main/docs/troubleshooting.md#high-error-rate"
+
+        - alert: CloudLaunchNoHealthyPods
+          expr: |
+            count(kube_pod_status_ready{namespace="cloudlaunch", condition="true"}) < 1
+          for: 1m
+          labels:
+            severity: critical
+            team: platform
+          annotations:
+            summary: "CloudLaunch API has no healthy pods"
+            description: "There are no ready pods in the cloudlaunch namespace"
+            runbook_url: "https://github.com/sayaksatpathi/AWS-EKS-GitOps-Production-Lab-/blob/main/docs/troubleshooting.md#no-healthy-pods"
+
+        - alert: CloudLaunchHighLatency
+          expr: |
+            histogram_quantile(0.95, sum(rate(cloudlaunch_http_request_duration_seconds_bucket[5m])) by (le)) > 1
+          for: 5m
+          labels:
+            severity: warning
+            team: platform
+          annotations:
+            summary: "CloudLaunch API p95 latency is high"
+            description: "p95 request latency is {{ $value | humanizeDuration }}"
+
+        - alert: CloudLaunchPodRestartingFrequently
+          expr: |
+            rate(kube_pod_container_status_restarts_total{namespace="cloudlaunch"}[15m]) * 60 * 15 > 3
+          for: 5m
+          labels:
+            severity: warning
+            team: platform
+          annotations:
+            summary: "CloudLaunch pod restarting frequently"
+            description: "Pod {{ $labels.pod }} has restarted {{ $value | humanize }} times in the last 15 minutes"
+
+    - name: cloudlaunch.deployment
+      rules:
+        - alert: CloudLaunchDeploymentNotReady
+          expr: |
+            kube_deployment_status_replicas_available{namespace="cloudlaunch", deployment="cloudlaunch-api"}
+            /
+            kube_deployment_spec_replicas{namespace="cloudlaunch", deployment="cloudlaunch-api"}
+            < 0.5
+          for: 5m
+          labels:
+            severity: critical
+            team: platform
+          annotations:
+            summary: "CloudLaunch deployment has less than 50% available replicas"
+            description: "Deployment cloudlaunch-api has only {{ $value | humanizePercentage }} replicas available"

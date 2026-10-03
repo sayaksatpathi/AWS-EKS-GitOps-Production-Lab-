@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudlaunch-config
+  namespace: cloudlaunch
+  labels:
+    app.kubernetes.io/name: cloudlaunch-api
+data:
+  APP_NAME: "cloudlaunch-api"
+  PORT: "8080"
+  NAMESPACE: "cloudlaunch"
+  FAIL_READY: "false"
+  FAIL_STARTUP: "false"
