@@ -59,7 +59,6 @@ def test_items(client):
 
 def test_ready_fail_mode(client):
     os.environ['FAIL_READY'] = 'true'
-    import importlib
     import main as m
     m.FAIL_READY = True
     rv = client.get('/ready')

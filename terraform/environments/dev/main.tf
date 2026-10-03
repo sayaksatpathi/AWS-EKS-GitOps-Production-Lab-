@@ -1,6 +1,6 @@
 locals {
   cluster_name = "${var.project}-${var.environment}"
-  common_tags = {
+  common_tags  = {
     Project     = var.project
     Environment = var.environment
     ManagedBy   = "terraform"

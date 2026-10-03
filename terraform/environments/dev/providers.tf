@@ -27,9 +27,9 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "cloudlaunch"
-      ManagedBy   = "terraform"
-      Repository  = "https://github.com/sayaksatpathi/AWS-EKS-GitOps-Production-Lab-"
+      Project    = "cloudlaunch"
+      ManagedBy  = "terraform"
+      Repository = "https://github.com/sayaksatpathi/AWS-EKS-GitOps-Production-Lab-"
     }
   }
 }
