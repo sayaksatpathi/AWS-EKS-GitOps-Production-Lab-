@@ -1,0 +1,58 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.tfplan
+tfplan
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+coverage.xml
+.coverage
+htmlcov/
+
+# Docker
+.docker/
+
+# AWS
+.aws/credentials
+*.pem
+*.key
+
+# Secrets / environment
+.env
+.env.*
+*.secret
+secrets/
+credentials
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if any tools use it)
+node_modules/
+
+# Logs
+*.log

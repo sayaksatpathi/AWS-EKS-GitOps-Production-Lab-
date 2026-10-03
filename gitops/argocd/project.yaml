@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: cloudlaunch
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: CloudLaunch EKS GitOps Lab project
+  sourceRepos:
+    - https://github.com/sayaksatpathi/AWS-EKS-GitOps-Production-Lab-
+  destinations:
+    - namespace: cloudlaunch
+      server: https://kubernetes.default.svc
+    - namespace: monitoring
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+    - name: read-only
+      description: Read-only access
+      policies:
+        - p, proj:cloudlaunch:read-only, applications, get, cloudlaunch/*, allow
