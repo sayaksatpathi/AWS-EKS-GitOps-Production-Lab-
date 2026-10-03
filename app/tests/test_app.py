@@ -9,7 +9,7 @@ os.environ.setdefault('APP_VERSION', '1.0.0')
 os.environ.setdefault('FAIL_READY', 'false')
 os.environ.setdefault('FAIL_STARTUP', 'false')
 
-from main import app
+from main import app  # noqa: E402
 
 
 @pytest.fixture
